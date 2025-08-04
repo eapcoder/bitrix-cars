@@ -4,7 +4,7 @@
     <br>
 </p>
 
-<img src="/images/diag.png">
+<img src="/components/customs/images/diag.png">
 
 DIRECTORY STRUCTURE
 -------------------
