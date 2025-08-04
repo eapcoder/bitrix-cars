@@ -6,14 +6,16 @@
 
 <img src="/components/customs/images/diag.png">
 
-DIRECTORY STRUCTURE
+СТРУКТУРА КОМПОНЕНТА
 -------------------
-/customs/
-    /cars/
-    /cars.element/
-    /cars.index/
-    /cars.section/
-    /traits/
+```php
+/customs/           
+    /cars/          основная директория компонента
+    /cars.element/  для вывода элементов инфоблока
+    /cars.index/    основаня страница
+    /cars.section/  для вывода категорий
+    /traits/        вспомогательный класс
+```
 
 ПРОТЕСТИРОВАНО
 ------------
