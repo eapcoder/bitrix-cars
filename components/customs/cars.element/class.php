@@ -1,7 +1,5 @@
 <?
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
-// пространства имен для работы с языковыми файлами
-
 
 CBitrixComponent::includeComponentClass("customs:traits");
 class CIblocListWithEvent extends CommonClass
@@ -13,15 +11,13 @@ class CIblocListWithEvent extends CommonClass
         global $USER;
         $start = htmlentities($_GET['start']);
         $end = htmlentities($_GET['end']);
-        //2025-07-31-19-28-20
+        
         // если выбран режим поддержки ЧПУ, вызываем метод sefMode()
         if ($this->arParams["SEF_MODE"] === "Y") {
-
             $this->arParams["ENDSTART"] = '/?start=' . $start . '&end=' . $end . '&clear_cache=Y';
         }
         // если отключен режим поддержки ЧПУ, вызываем метод noSefMode()
         if ($this->arParams["SEF_MODE"] != "Y") {
-
             $this->arParams["ENDSTART"] = '&start=' . $start . '&end=' . $end . '&clear_cache=Y';
         }
 

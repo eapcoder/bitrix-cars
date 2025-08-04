@@ -28,9 +28,7 @@ class Cars extends CBitrixComponent
 
     public function executeComponent()
     {
-
         try {
-         
             $this->checkModules();
             $this->getResult();
             
@@ -54,22 +52,18 @@ class Cars extends CBitrixComponent
         // если выбран режим поддержки ЧПУ, вызываем метод sefMode()
         if ($this->arParams["SEF_MODE"] === "Y") {
             $componentPage = $this->sefMode();
-           
             $this->arParams["ENDSTART"] = '/?start=' . $start . '&end=' . $end . '&clear_cache=Y';
             
         }
         // если отключен режим поддержки ЧПУ, вызываем метод noSefMode()
-        
         if ($this->arParams["SEF_MODE"] != "Y") {
             $componentPage = $this->noSefMode();
             $this->arParams["ENDSTART"] = '&start=' . $start . '&end=' . $end . '&clear_cache=Y';
         }
 
-      
         // если нет валидного кеша, получаем данные из БД
         if ($this->startResultCache(false, $USER->getId(). $start. $end)) //startResultCache используется не для кеширования html, а для кеширования arResult
         {
-            
             // Запрос к инфоблоку через класс ORM
             if (CModule::IncludeModule("iblock")) {
                 $iblock_id = \Bitrix\Iblock\IblockTable::getList(['filter'=>['CODE'=> $this->arParams['IBLOCK_TYPE']]])->Fetch()["ID"];
@@ -79,29 +73,15 @@ class Cars extends CBitrixComponent
                     $this->IncludeComponentTemplate('error');
 
                 } else{
+                    //TODO Для предварительного вывода на главной странице комонента
+                    //TODO $onIndexPage = $this->onIndexPage($iblock_id, $arrFilter);
 
-                    $my_elements = CIBlockElement::GetList(
-                        ["ID" => "ASC"], // Сортировка
-                        ["IBLOCK_ID" => $iblock_id, $arrFilter], // Фильтр
-                        false, // Группировка
-                        false, // Постраничная навигация
-                        ['ID', 'NAME', 'DETAIL_PAGE_URL', 'PROPERTY_WORK_START', 'PROPERTY_WORK_END'] // Выбираемые поля
-                    );
-
-                    while ($arResult = $my_elements->GetNext()) {
-                      
-                        $this->arResult['ITEMS'][] = $arResult;
-                        //Debug::dump($arResult);
-                        ///echo urldecode($arResult['DETAIL_PAGE_URL']) . "<br>";
-                    }
-                    
                     if (isset($this->arResult)) {
-                        // ключи $arResult перечисленные при вызове этого метода, будут доступны в component_epilog.php и ниже по коду, обратите внимание там будет другой $arResult
+
                         $this->SetResultCacheKeys(
                             array('')
                         );
                         // подключаем шаблон и сохраняем кеш
-                        
                         $this->IncludeComponentTemplate($componentPage);
                     } else { // если выяснилось что кешировать данные не требуется, прерываем кеширование и выдаем сообщение «Страница не найдена»
                       
@@ -115,6 +95,26 @@ class Cars extends CBitrixComponent
         
     }
 
+    /**
+     * //TODO
+     */
+    protected function onIndexPage($iblock_id, $arrFilter) {
+
+        $my_elements = CIBlockElement::GetList(
+            ["ID" => "ASC"], // Сортировка
+            ["IBLOCK_ID" => $iblock_id, $arrFilter], // Фильтр
+            false, // Группировка
+            false, // Постраничная навигация
+            ['ID', 'NAME', 'DETAIL_PAGE_URL', 'PROPERTY_WORK_START', 'PROPERTY_WORK_END'] // Выбираемые поля
+        );
+
+        while ($arResult = $my_elements->GetNext()) {
+
+            $this->arResult['ITEMS'][] = $arResult;
+            //Debug::dump($arResult);
+            ///echo urldecode($arResult['DETAIL_PAGE_URL']) . "<br>";
+        }
+    }
 
      // метод обработки режима ЧПУ
     protected function sefMode()
@@ -403,9 +403,4 @@ class Cars extends CBitrixComponent
     }
     
 
-    /*     public function cars($x)
-    {
-        var_dump(1);
-        return 123;
-    } */
 }

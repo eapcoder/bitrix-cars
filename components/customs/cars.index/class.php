@@ -1,6 +1,6 @@
 <?
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
-// пространства имен для работы с языковыми файлами
+
 
 CBitrixComponent::includeComponentClass("customs:traits");
 class CIblocListWithEvent extends CommonClass
