@@ -1,0 +1,89 @@
+<?
+
+use Bitrix\Main\Diag\Debug;
+
+if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die(); ?>
+<section>
+    <div class="container product_slider">
+        <h2><? echo GetMessage("COM_NAME") ?></h2>
+        <div class="swiper mySwiper4">
+            <div class="swiper-wrapper">
+                <div class="col-8 title">Время запрошенное с <?= $_GET["start"] ?> по <?= $_GET["end"] ?></div>
+                <?
+                $imgSrc = $bImage ? $arItem['FIELDS']['PREVIEW_PICTURE']['SRC'] : $this->GetFolder() . '/images/people-default.jpg';
+
+                ?>
+                <? foreach ($arResult['ITEMS'] as $arElement) : ?>
+                    <?
+                    //Debug::dump($arElement);
+                    //Debug::dump($arElement);
+                    // ссылки для экшенов и название кнопки
+                    $arButtons = CIBlock::GetPanelButtons(
+                        // идентификатор инфоблока, которому принадлежит элемент
+                        $arElement["IBLOCK_ID"],
+                        // идентификатор текущего элемента информационного блока   
+                        $arElement["ID"],
+                        // идентификатор раздела инфоблока (при наличии)  
+                        0,
+                        // массив, содержащий локализацию названий
+                        array("SECTION_BUTTONS" => false, "SESSID" => false)
+                    );
+                    // экшен изменения элемента
+                    $this->AddEditAction(
+                        // идентификатор текущего элемента информационного блока
+                        $arElement["ID"],
+                        // ссылка из $arButtons на изменение эллемента
+                        $arButtons["edit"]["edit_element"]["ACTION_URL"],
+                        // название кнопки
+                        $arButtons["edit"]["edit_element"]["TEXT"]
+                    );
+                    // экшен добавления элемента
+                    $this->AddEditAction(
+                        // идентификатор текущего элемента информационного блока
+                        $arElement["ID"],
+                        // ссылка из $arButtons на изменение эллемента
+                        $arButtons["edit"]["add_element"]["ACTION_URL"],
+                        // название кнопки
+                        $arButtons["edit"]["add_element"]["TEXT"]
+                    );
+                    // экшен удаления элемента
+                    $this->AddDeleteAction(
+                        // идентификатор текущего элемента информационного блока
+                        $arElement["ID"],
+                        // ссылка из $arButtons на изменение эллемента
+                        $arButtons["edit"]["delete_element"]["ACTION_URL"],
+                        // название кнопки
+                        $arButtons["edit"]["delete_element"]["TEXT"],
+                        array("CONFIRM" => "Удалить?")
+                    ); ?>
+                    <?
+                    // проверка на администратора для вывода экшенов
+                    if ($USER->IsAdmin() && $APPLICATION->GetShowIncludeAreas()) {
+                        echo '<div class="swiper-slide" id="' . $this->GetEditAreaId($arElement["ID"]) . '">';
+                    } else {
+                        echo '<div class="swiper-slide">';
+                    } ?>
+                    <div class="product">
+                        <div class="item">
+                            <div class="row">
+
+                                <div class="col-8 title"><?= $arElement["NAME"] ?></div>
+                                <div class="col-4 image"><img src="<?= $imgSrc ?>" alt="<?= $arElement["PREVIEW_PICTURE"]["DESCRIPTION"] ?>" width="40" height="40"></div>
+                                <div class="col-12 tekst">Доступность начало <?= $arElement["PROPERTY_WORK_START_VALUE"] ?></div>
+                                <div class="col-12 tekst">Доступность окончание <?= $arElement["PROPERTY_WORK_END_VALUE"] ?></div>
+                                <div class="col-12 button">Узнать больше<span class="icon-arrow-right"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <? echo '</div>'; ?>
+                <? endforeach ?>
+            </div>
+            <div class="slider-nav">
+                <div class="swiper-prev"></div>
+                <div class="swiper-indicators"></div>
+                <div class="swiper-next"></div>
+            </div>
+        </div>
+    </div>
+</section>
