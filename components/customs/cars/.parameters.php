@@ -3,6 +3,8 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
 // пространства имен highloadblock
 use Bitrix\Highloadblock\HighloadBlockTable;
+use Bitrix\Main\Diag\Debug;
+
 // подключаем модуль highloadblock
 \Bitrix\Main\Loader::includeModule("highloadblock");
 
@@ -30,14 +32,29 @@ while ($obIBlock = $rsIBlock->Fetch()) {
 }
 
 
+$arrPropertyToShow = [];
+if (!empty($arCurrentValues['IBLOCK_ID'])) {
+        $iblockID = $arCurrentValues['IBLOCK_ID']; // ID инфоблока
+        $res = CIBlock::GetProperties($iblockID);
+        while ($property = $res->Fetch()) {
+        // Обработка каждого свойства
+        $arrPropertyToShow[$property["CODE"]] = $property["NAME"] . '['. $property["CODE"].']';
+    }
+}
+
+
 // стандартный запрос getList
 $arHlData = HighloadBlockTable::getList(array(
     'select' => array("ID", "NAME"),
     'order' => array('ID' => 'ASC'),
     'limit' => '50',
 ));
+
+
+
 // формируем массив данных
 while ($arHlbk = $arHlData->Fetch()) {
+   
     $arrHlblocks[$arHlbk['ID']] = $arHlbk['NAME'];
 }
 
@@ -87,7 +104,19 @@ $arComponentParameters = [
             'MULTIPLE' => 'N',                   // одиночное/множественное значение (N/Y)
             'SORT' => 7,
         ),
-     
+
+        // выбор типа инфоблока
+        'IBLOCK_PROPERTY_SHOW' => array(                  // ключ массива $arParams в component.php
+            'PARENT' => 'BASE',                  // название группы
+            'NAME' => 'Выберите отображаемые свойства',  // название параметра
+            'TYPE' => 'LIST',                    // тип элемента управления, в котором будет устанавливаться параметр
+            'VALUES' => $arrPropertyToShow,           // входные значения
+            'REFRESH' => 'Y',                    // перегружать настройки или нет после выбора (N/Y)
+            'DEFAULT' => 'news',                 // значение по умолчанию
+            'MULTIPLE' => 'Y',                   // одиночное/множественное значение (N/Y)
+            'SORT' => 7,
+        ),
+
         // настройки режима без ЧПУ, доступно в админке до активации чекбокса
         "VARIABLE_ALIASES" => [
             // элемент

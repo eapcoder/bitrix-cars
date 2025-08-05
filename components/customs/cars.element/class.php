@@ -1,4 +1,7 @@
 <?
+
+use Bitrix\Main\Diag\Debug;
+
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 CBitrixComponent::includeComponentClass("customs:traits");
@@ -28,18 +31,20 @@ class CIblocListWithEvent extends CommonClass
             if (empty($arrFilter = $this->getUserData())) {
                 $this->IncludeComponentTemplate('error');
             }
-            
+
+            $arrProperty = (!empty($this->arParams['IBLOCK_PROPERTY_SHOW'])) ? $this->arrayMerge($this->arParams['IBLOCK_PROPERTY_SHOW']) : ['ID', 'NAME', 'DETAIL_PAGE_URL', 'PROPERTY_WORK_START', 'PROPERTY_WORK_END', 'SECTION_ID', 'ELEMENT_CODE'];
+
             $my_elements = CIBlockElement::GetList(
                 ["ID" => "ASC"], // Сортировка
                 ["IBLOCK_ID" => $this->arParams['IBLOCK_ID'], "CODE" => $this->arParams['ELEMENT_CODE'], $arrFilter], // Фильтр
                 false, // Группировка
                 false, // Постраничная навигация
-                ['ID', 'NAME', 'DETAIL_PAGE_URL', 'PROPERTY_WORK_START', 'PROPERTY_WORK_END', 'ELEMENT_CODE'] // Выбираемые поля
+                $arrProperty
             );
 
             // формируем массив arResult
             while ($arItem = $my_elements->GetNext()) {
-                
+                //Debug::dump($arItem);
                 $this->arResult[] = $arItem;
             }
             // кэш не затронет весь код ниже, он будут выполняться на каждом хите, здесь работаем с другим $arResult, будут доступны только те ключи массива, которые перечислены в вызове SetResultCacheKeys()

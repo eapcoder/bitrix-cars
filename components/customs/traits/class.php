@@ -73,6 +73,22 @@ class CommonClass extends CBitrixComponent
         return true;
     }
 
+
+    private function addProperty($n)
+    {
+        if (strpos($n, 'PROPERTY_') === false) {
+            return 'PROPERTY_' . $n;
+        }
+    }
+    
+    public function arrayMerge($tomerge) {
+        $b = array_map([$this, 'addProperty'], $tomerge);
+        $arrProperty = ['ID', 'NAME', 'DETAIL_PAGE_URL', 'PROPERTY_WORK_START', 'PROPERTY_WORK_END', 'SECTION_ID']; // Выбираемые поля
+        return array_unique(array_merge($arrProperty, $b));
+
+    }
+
+
     public function getUserData()
     {
         global $USER;

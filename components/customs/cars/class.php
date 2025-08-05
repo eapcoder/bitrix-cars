@@ -45,7 +45,8 @@ class Cars extends CBitrixComponent
         if (!$USER->IsAuthorized()) {
             ShowError(Loc::getMessage('ERROR_NO_USER'));
         }
-       
+
+        
         $start = htmlentities($_GET['start']);
         $end = htmlentities($_GET['end']);
         

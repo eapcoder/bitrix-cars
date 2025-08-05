@@ -17,7 +17,8 @@ $APPLICATION->IncludeComponent(
         "SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
         "SEF_FOLDER" => $arParams["SEF_FOLDER"],
         "HIGHLIGHT_BLOCK_ID" => $arParams["HIGHLIGHT_BLOCK_ID"],
-        "ENDSTART_TEMPLATE" => $arParams["ENDSTART_TEMPLATE"]
+        "ENDSTART_TEMPLATE" => $arParams["ENDSTART_TEMPLATE"],
+        "IBLOCK_PROPERTY_SHOW" => $arParams["IBLOCK_PROPERTY_SHOW"]
     ),
     $component
 );

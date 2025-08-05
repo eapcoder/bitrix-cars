@@ -19,7 +19,8 @@ $APPLICATION->IncludeComponent(
         "SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
         "CATALOG_URL" => $arResult["ALIASES"]["CATALOG_URL"],
         "HIGHLIGHT_BLOCK_ID" => $arParams["HIGHLIGHT_BLOCK_ID"],
-        "ENDSTART_TEMPLATE" => $arParams["ENDSTART_TEMPLATE"]
+        "ENDSTART_TEMPLATE" => $arParams["ENDSTART_TEMPLATE"],
+        "IBLOCK_PROPERTY_SHOW" => $arParams["IBLOCK_PROPERTY_SHOW"]
     ),
     $component
 );
